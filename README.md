@@ -11,6 +11,6 @@ I'm still working on my projects, and will submit soon
 - email(alexandrprohnitskii@gmail.com)
 - linkedin[Aleksandr Prokhnitskii) (https://www.linkedin.com/in/AlexandrProhnitskii)
 - telegram(@Alexandr_Proh)
-- facebook(https://facebook.com/in/AlexandrProhnitskii)
+- facebook(https://facebook.com/AlexandrProhnitskii)
 
 I would love to join the production of the project or participate in a community, if you are looking for an enthusiastic and persistent back-end developer, feel free and contact me! :)
