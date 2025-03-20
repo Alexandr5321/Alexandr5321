@@ -1,0 +1,78 @@
+stages:
+  - build
+  - test
+  - style
+  - deploy
+
+
+build-cat-and-grep:
+  stage: build
+  tags:
+    - build
+  when:
+    on_success
+  script:
+    - echo "Building s21_cat..."
+    - cd src/cat && make s21_cat
+    - echo "Building s21_grep..."
+    - cd ../grep && make s21_grep
+  artifacts:
+    paths:
+      - src/cat/s21_cat
+      - src/grep/s21_grep
+    expire_in: 30 days
+  only:
+    - develop
+  after_script:
+    - cd src
+    - bash notification.sh $CI_JOB_STATUS
+
+style-job:
+  stage: style
+  tags:
+    - style
+  when:
+    on_success
+  script:
+    - clang-format -style=Google -i src/cat/s21_cat* src/grep/s21_grep*
+    - clang-format -style=Google -n src/cat/s21_cat.* src/grep/s21_grep.*
+  only:
+    - develop
+  after_script:
+    - cd src
+    - bash notification.sh $CI_JOB_STATUS
+
+test-job:
+  stage: test
+  tags:
+    - test
+  when:
+    on_success
+  script:
+    - cd src/cat && chmod +x s21_cat && cd cat_test && chmod +x test.sh ./test.sh
+    - cd ../../grep && chmod +x s21_grep && cd test_grep && chmod +x test.sh ./test.sh
+  dependencies:
+    - build-cat-and-grep
+  only:
+    - develop
+  after_script:
+    - cd src
+    - bash notification.sh $CI_JOB_STATUS
+
+deploy-job:
+  stage: deploy
+  tags:
+    - deploy
+  script:
+    - mkdir -p deploy_files/$CI_JOB_NAME
+    - cp src/cat/s21_cat deploy_files/$CI_JOB_NAME/
+    - cp src/grep/s21_grep deploy_files/$CI_JOB_NAME/
+  after_script:
+    - cd src
+    - bash notification.sh $CI_JOB_STATUS
+  artifacts:
+    paths:
+      - deploy_files/
+    expire_in: 30 days
+  only:
+    - develop

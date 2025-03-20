@@ -1,0 +1,2 @@
+- scp -StrictKeyChecking no usr/home/s21_cat ubuntu2@192.168.64.9/24
+- scp -StrictKeyChecking no usr/home/s21_grep ubuntu2@192.168.64.9/24
